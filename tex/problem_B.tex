@@ -1,0 +1,79 @@
+%\documentclass{cumcmthesis}
+\documentclass[withoutpreface,bwprint]{cumcmthesis} %去掉封面与编号页，电子版提交的时候使用。
+
+
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{url}   % 网页链接
+\usepackage{subcaption} % 子标题
+\title{基于求职者心理测试的综合心理测试分析与分类模型研究}
+\tihao{B}
+\baominghao{4321}
+\schoolname{西安交通大学}
+\membera{李征}
+\memberb{宋昊天}
+\memberc{王子隆}
+\supervisor{陈磊}
+\yearinput{2024}
+\monthinput{7}
+\dayinput{5}
+
+\begin{document}
+
+ \maketitle
+ \begin{abstract}
+    心理测试作为重要的研究手段在教育、心理疾病诊断、心理咨询和人才选拔中得到了广泛应用。本文旨在通过对某单位148名求职者的心理测试数据进行分析，研究三种常用量表（症状自评量表SCL-90、职业成熟度量表和大五人格量表）在测试者分类中的应用，并探讨各量表测试结果之间的关联性。
+    
+    首先，依据单独量表的特点对测试者进行分类，并通过相关分析和交叉验证方法研究各量表结果的联系。其次，基于量表因子和测试数据建立综合评价指标体系，对测试者进行综合分类。随后，通过统计分析方法比较A、B两组测试者在各量表上的差异，揭示分组间的显著性差异。最后，评判心理测试得分总和方法的准确性，并提出改进建议。研究结果为心理测试在人才选拔中的应用提供了科学依据，并为提升心理测试的准确性和客观性提供了参考。
+
+\keywords{综合评价指标，统计分析，分类模型\quad  心理健康评估\quad   症状自评量表，职业成熟度量表，大五人格量表\quad  人才选拔}
+\end{abstract}
+
+
+%\tableofcontents
+%\newpage
+
+\section{公式}
+\section{参考文献与引用}
+
+参考文献对于一篇正式的论文来说是必不可少的，在建模中重要的参考文献当然应该列出。
+
+%参考文献
+\begin{thebibliography}{9}%宽度9
+    \bibitem[1]{latex} 
+    \bibitem[2]{mathematical-modeling}    全国大学生数学建模竞赛论文格式规范 (2023 年 修改).
+    \bibitem[3]{3} \url{https://www.wikipedia.org}
+\end{thebibliography}
+
+\newpage
+%附录
+\begin{appendices}
+
+\section{相关系数矩阵计算}
+
+\begin{lstlisting}[language=python]
+    import numpy as np
+    import pandas as pd
+    import time
+    
+    start = time.time()
+    
+    # 读取数据
+    read_df = pd.read_excel(r"E:\SAI\TEST.xlsx")
+    data = read_df.iloc[2:10, 0:86].values
+        print("初始化dis矩阵进度：{}/{}".format(i + 1, n))
+    # 下三角复制到上三角
+    dis = dis + dis.T - np.diag(dis.diagonal())
+    print("初始化dis矩阵进度：{}/{}".format(
+    plt.show()
+    
+    end = time.time()
+    print("总运行时间：", end - start)
+    
+\end{lstlisting}
+
+\section{支撑材料内容组成}
+
+
+\end{appendices}
+
+\end{document} 
