@@ -111,11 +111,17 @@
     \caption{符号说明}\label{tab:001} \centering
     \begin{tabular}{ccccc}
         \toprule[1.5pt]
-        符号 & 意义 & 单位 \\
+        符号 & 意义  \\
         \midrule[1pt]
-        5 & 269.8 & 0.000674 \\
-        10 & 421.0 & 0.001035 \\
-        20 & 640.2 & 0.001565 \\
+        $d(x_i, c_i)$ & 数据点$x_i$到质心$c_i$的欧式距离 \\  
+        $M$ & 数据的维度 \\   
+        $x_{im}$ & 数据点 i 在第 m 个维度的坐标 \\
+        $c_{im}$ & 质心 i 在第 m 个维度的坐标 \\
+        $k$ & 簇的数量 \\
+        $N_j$ &  第 j 个簇中的数据点数量。 \\
+        $SSE$ & 数据集的误差平方和 \\
+        $r_{jk}$ & 两变量$x_j$与$x_k$的相关系数，反映它们之间的线性关系。\\
+        $\overline{x}_j $ & 第 j 个变量的样本均值 \\
         \bottomrule[1.5pt]
     \end{tabular}
 \end{table}
@@ -132,20 +138,161 @@
 并约定只研究同时做过三个人格测试的测试者，不考虑只做过其中一项或两项测试的测试者的报告。
 
 为了建立完整的测试数据集，需要选择三种测试中有价值的测验指标。
-对于\textbf{症状自评量表SCL-90}，选择躯体化、强迫症状、人际关系敏感、抑郁、焦虑、敌对、恐怖、偏执、精神病性9大参量较为合适；
-对于\textbf{职业成熟度量表}，选择信息应用、职业认知、自我认知、个人调适、职业态度、价值观念、职业选择、条件评估这8大参量比较合适；
-而对于\textbf{大五人格量表}，应当选取N（神经质），E（外向性），O（开放性），A（宜人性），C（严谨性）这五大指标；
+对于\textbf{症状自评量表SCL-90}，选择躯体化、强迫症状、人际关系敏感、抑郁、焦虑、敌对、恐怖、偏执、精神病性9大指标的均分较为合适；
+对于\textbf{职业成熟度量表}，选择信息应用、职业认知、自我认知、个人调适、职业态度、价值观念、职业选择、条件评估这8大指标的均分比较合适；
+而对于\textbf{大五人格量表}，应当选取N（神经质），E（外向性），O（开放性），A（宜人性），C（严谨性）这五大指标的得分；
 
-经过两轮筛选和处理，我们最终得到了106人的各自的三大测试数据，这样处理的数据很好地保留了测试结果，同时具有很高的研究价值。
+经过两轮筛选和处理，我们最终得到了106人的各自的三大测试数据，这样处理的数据很好地保留了测试结果中有价值的信息，同时具有很高的研究意义。
 
 
-\subsubsection{对测试者分类}
+\subsubsection{k-means聚类分析}
 
+为了实现对测试者的分类，我们可以采用分散化聚类方法。k-mean聚类方法简洁且快速，适合解决这种简单的分类。
+数据对象间的相似度度量一般是通过数据之间的相互关系来确定，而得到距离值之后，元素间才可以被联系起来。
+通常用欧式距离作为衡量数据对象间相似度的指标，相似度与数据对象间的距离成反比，相似度越大，距离越小。
+算法需要预先指定初始聚类数目k各初始聚类中心，根据数据对象与聚类中心之间的相似度，
+不断更新聚类中心位置，不断降低类簇的误差平方和SSE，当其不在变化时，聚类结束，得到最终结果。
+
+
+空间中数据对象与聚类中心间的欧式距离计算公式为：
+% 欧氏距离公式
+\begin{equation}
+    d(x_i, c_j) = \sqrt{\sum_{m=1}^M (x_{im} - c_{jm})^2}
+\end{equation}
+
+整个数据集的误差平方和SSE计算公式为：
+% SSE公式
+\begin{equation}
+\text{SSE} = \sum_{j=1}^k \sum_{i=1}^{N_j} d(x_i, c_j)^2
+\end{equation}
+    
+
+\paragraph*{K-means 算法}归纳为（J. MacQueen, 1967）\cite{k-means}：
+\begin{enumerate}
+    \item 随机选择 k 个初始质心（centroids）。
+    
+    \item 将每个点分配到离它最近的质心，形成 k 个簇（clusters）。
+    
+    \item 重新计算每个簇的质心，即将每个簇中的点的平均值作为新的质心。
+    
+    \item 重复步骤 2 和 3，直到质心不再变化或达到预定的迭代次数.
+
+\end{enumerate}
+
+对于本题的三种量表,分别取每个测试者作为数据点,其测试结果的指标作为数据点的M个维度的值,三张表的维度分别为9,8和5.
+
+
+\paragraph*{Elbow Method}选择好数据集和聚类方法,还有很重要的问题是确定合适的$k$值(即聚类的数量),
+有很多种方法可以确定最佳的 k 值, 其中肘部法(Elbow Method)简单直观，易于理解和实现,且常用于 K-means 聚类。
+\begin{enumerate}
+    \item 计算不同 k 值对应的总平方误差（SSE, Sum of Squared Errors）。
+    
+    \item 将 k 值与 SSE 绘制成图。
+
+    \item 找到图中 SSE 下降速度显著变缓的位置，即“肘部”，作为最佳 k 值。
+
+\end{enumerate}
+下(上)方以症状自评量表为例,不同k值和SSE的关系如下,可以看出当k=4时,SSE下降速度显著变缓,可以作为最佳k值.
+
+职业成熟度量表与大五人格量表得到的结果与之相似,最佳k值均为4.
+
+聚类执行结果如下:
+
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}[c]{0.48\textwidth}
+        \centering
+        \includegraphics[height=0.2\textheight]{SCL.png}
+        \subcaption{症状自评量表中k值和SSE的关系}
+    \end{minipage}
+    \begin{minipage}[c]{0.48\textwidth}
+        \centering
+        \includegraphics[height=0.2\textheight]{SCL2.png}
+        \subcaption{症状自评量表聚类结果}
+    \end{minipage}
+    \caption{症状自评量表}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}[c]{0.48\textwidth}
+        \centering
+        \includegraphics[height=0.2\textheight]{job2.png}
+        \subcaption{职业成熟度量表聚类结果}
+    \end{minipage}
+    \begin{minipage}[c]{0.48\textwidth}
+        \centering
+        \includegraphics[height=0.2\textheight]{bigfive2.png}
+        \subcaption{大五人格量表聚类结果}
+    \end{minipage}
+    \caption{职业成熟度量表与大五人格量表聚类结果}
+\end{figure}
 
 \subsubsection{三种量表的联系}
 
+%探究三种量表之间的联系,最直接的就是探究他们参数之间的联系,这里我们可以对指标变量进行相似性度量,并对其
+探究三种量表之间的联系,最直接的就是探究他们参数之间的联系,这里我们可以对指标变量进行相似性度量,
+
+记数据点$x_j$的为$(x_{1j}, x_{2j}, ... , x_{nj})^T$, 则可以用两变量$x_j$与$x_k$的样本相关系数作为他们的相似性度量.
+
+% 皮尔逊相关系数公式
+\begin{equation}
+r_{jk} = \frac{\sum_{i=1}^n (x_{ij} - \overline{x}_j)(x_{ik} - \overline{x}_k)}{\sqrt{\sum_{i=1}^n (x_{ij} - \overline{x}_j)^2} \sqrt{\sum_{i=1}^n (x_{ik} - \overline{x}_k)^2}}
+\end{equation}
+
+% 样本均值公式
+\begin{equation}
+\overline{x}_j = \frac{1}{n} \sum_{i=1}^n x_{ij}
+\end{equation}
+
+22个参量分别两两计算得到原矩阵及热力矩阵如下:
+
+\begin{figure}
+    \centering
+    \begin{minipage}[c]{0.8\textwidth}
+        \centering
+        \includegraphics[height=0.4\textheight]{heatmap.png}
+    \end{minipage}
+    \caption{热力矩阵}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{minipage}[c]{0.60\textwidth}
+        \centering
+        \includegraphics[height=0.3\textheight]{22.png}
+        \subcaption{22个参量}
+    \end{minipage}
+    \begin{minipage}[c]{0.60\textwidth}
+        \centering
+        \includegraphics[height=0.3\textheight]{heatmap.png}
+        \subcaption{热力矩阵}
+    \end{minipage}
+    \caption{职业成熟度量表与大五人格量表聚类结果}
+\end{figure}
+
+
 \subsubsection{三种量表得出结果之间的联系}
+
+
+
+
+
+
 \subsection{问题二求解}
+
+
+权重是评价模型中反映各评价指标相对重要程度的关键参数。指标赋权方法主要分为主观赋权、客观赋权两类。
+主观赋权因过度依赖经验判断而缺乏一定客观性，客观赋权因忽略指标间相关性而难以结合实际,本文模型结合主观赋权和客观赋权，
+采用层次分析-熵值组合赋权法对各因素对个体的评价能力进行定性-定量分析，使其权重同时反映主观经验和客观数据。
+\subsubsection{权重法}
+
+\subsubsection{熵权法}
+
+\subsubsection{权重法}
 
 \subsection{问题三求解}
 
@@ -160,6 +307,7 @@
     \bibitem[1]{SCL-90} Derogatis, L. R. (1994). SCL-90-R: Symptom Checklist-90-R. Pearson.
     \bibitem[2]{The Career Development Quarterly} Savickas, M. L. (1999). The Career Development Quarterly.
     \bibitem[3]{The Big Five trait taxonomy} John, O. P., Srivastava, S. (1999). The Big Five trait taxonomy: History, measurement, and theoretical perspectives.
+    \bibitem[4]{k-means}MacQueen, J. (1967). Some methods for classification and analysis of multivariate observations. In Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability, Volume 1: Statistics (pp. 281-297). University of California Press.
     \bibitem[]{mathematical-modeling}    全国大学生数学建模竞赛论文格式规范 (2023 年 修改).
     \bibitem[]{3} \url{https://www.wikipedia.org}
 \end{thebibliography}
