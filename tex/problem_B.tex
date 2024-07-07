@@ -113,20 +113,24 @@
         符号 & 意义  \\
         \midrule[1pt]
         $d(x_i, c_i)$ & 数据点$x_i$到质心$c_i$的欧式距离 \\  
-        $M$ & 数据的维度 \\   
+        $M$ & 数据的维度,指标的数量 \\   
+        \( n \) & 样本数量,测试者人数\\
         $x_{im}$ & 数据点 i 在第 m 个维度的坐标 \\
         $c_{im}$ & 质心 i 在第 m 个维度的坐标 \\
         $k$ & 簇的数量 \\
         $N_j$ &  第 j 个簇中的数据点数量。 \\
         $SSE$ & 数据集的误差平方和 \\
-        $r_{jk}$ & 两变量$x_j$与$x_k$的相关系数，反映它们之间的线性关系。\\
+        $r_{jk}$ & 两变量$x_j$与$x_k$的相关系数\\
         $\overline{x}_j $ & 第 j 个变量的样本均值 \\
-        $ \chi^2 $ & 卡方统计量，用于衡量观测值与期望值之间的差异。\\
-        $ O_i $ & 第 \(i\) 类的观测频数，即实际观测到的样本数据\\
+        $ \chi^2 $ & 卡方统计量\\
         $ E_i $ & 第 \(i\) 类的期望频数，即根据理论分布或假设计算出的期望值。\\
+        $ R(G_1, G_2) $ & 表示两类变量 \( G_1 \) 和 \( G_2 \) 之间的距离。\\
+        $ H_j $ &  第j个指标的熵值 \\
+        \( w_j \) & 第 \( j \) 个指标的权重\\
+        \( p_{ij} \) & 第 \( i \) 个样本在第 \( j \) 个指标上的标准化值占该指标总和的比重\\
+        $ \mu $ & 在综合评价指标体系下得出的总分 \\
         \bottomrule[1.5pt]
     \end{tabular}
-    %
 \end{table}
 
 \section{模型建立与求解}
@@ -137,7 +141,7 @@
 \paragraph*{数据选择及汇总}
 在附录提供的148人的391份心理测试报告中，不是每一个人都做了三份测试，同时有的测试报告的完成时间小于1分钟。
 由于本题大部分问题旨在探讨三种测试的之间的议题，而且正常的测试需要10-30分钟完成\cite{SCL-90}\cite{The Career Development Quarterly}\cite{The Big Five trait taxonomy}，
-我们做出假设2和3，即假设测试时间小于一分钟的报告不具有参考价值，舍弃测试时间小于一分钟的测试者的报告，
+本文做出假设2和3，即假设测试时间小于一分钟的报告不具有参考价值，舍弃测试时间小于一分钟的测试者的报告，
 并约定只研究同时做过三个人格测试的测试者，不考虑只做过其中一项或两项测试的测试者的报告。
 
 为了建立完整的测试数据集，需要选择三种测试中有价值的测验指标。
@@ -150,7 +154,7 @@
 
 \subsubsection{k-means聚类分析}
 
-为了实现对测试者的分类，我们可以采用分散化聚类方法。k-mean聚类方法简洁且快速，适合解决这种简单的分类。
+为了实现对测试者的分类，可以采用分散化聚类方法。k-mean聚类方法简洁且快速，适合解决这种简单的分类。
 数据对象间的相似度度量一般是通过数据之间的相互关系来确定，而得到距离值之后，元素间才可以被联系起来。
 通常用欧式距离作为衡量数据对象间相似度的指标，相似度与数据对象间的距离成反比，相似度越大，距离越小。
 算法需要预先指定初始聚类数目k各初始聚类中心，根据数据对象与聚类中心之间的相似度，
@@ -197,11 +201,11 @@
     \item 找到图中 SSE 下降速度显著变缓的位置，即“肘部”，作为最佳 k 值。
 
 \end{enumerate}
-下(上)方以症状自评量表为例,不同k值和SSE的关系如下,可以看出当k=4时,SSE下降速度显著变缓,可以作为最佳k值.
+下(上)方以症状自评量表为例,不同k值和SSE的关系图,可以看出当k=4时,SSE下降速度显著变缓,可以作为最佳k值.
 
 职业成熟度量表与大五人格量表得到的结果与之相似,最佳k值均为4.
 
-对于每种量表，都把人群分为了四类，聚类执行结果如下:
+对于每种量表，都把人群分为了四类，聚类执行结果如图:
 
 
 
@@ -241,8 +245,8 @@
 
 依据三种量表分别聚类，都将测试者分为了四类，现在探究三种量表分类结果之间的联系。
 
-\paragraph*{卡方检验}三种分类结果彼此之间互有重叠，但若需要证明它们之间是否存在联系，我们需要用到卡方检验。
-卡方检验（Chi-Square Test）是一种统计检验方法，用于判断观测数据与预期数据之间是否有显著差异。
+\paragraph*{卡方检验}三种分类结果彼此之间互有重叠，但若需要证明它们之间是否存在联系，本文需要用到卡方检验。
+卡方检验（Chi-Square Test）\cite{Chi-Square Test}是一种统计检验方法，用于判断观测数据与预期数据之间是否有显著差异。
 它广泛用于检验两个分类变量之间的关联性，或是检验一个变量的实际分布是否符合理论分布。
 卡方检验有多种形式，最常用的有独立性检验，用于检验两个分类变量是否独立，即是否存在关联性。
 
@@ -331,19 +335,25 @@
 \]
 在显著性水平 \(\alpha = 0.05\) 下，自由度为 9 的卡方临界值为 16.919。
 
-因为计算的 \(\chi^2 = 43.0124\) 大于临界值 16.919，所以我们拒绝零假设，认为职业成熟度量表分类结果与SCL量表分类结果之间有显著关联。
+因为计算的 \(\chi^2 = 43.0124\) 大于临界值 16.919，所以拒绝零假设，认为职业成熟度量表分类结果与SCL量表分类结果之间有显著关联。
 
 通过相同的处理，可以得出职业成熟度量表分类结果与大五人格量表分类结果的卡方值为85.0672，SCL量表分类结果与大五人格量表分类结果卡方值为18.6717，\textbf{均可以拒绝原假设，认为他们之间有显著联系。}
 
 
+
+\subsection{问题二求解}
+
+为了充分利用测试者三种测试的所有指标，最大化三种量表的参考价值，建立我们自己的评价体系，
+需要找到一种综合评价指标体系，用来结合三个量表，得到最终结果。
+在建立综合评价指标体系，建立模型后，再通过聚类分析，进行分类。
+
 \subsubsection{三种量表的联系}
 
-%探究三种量表之间的联系,最直接的就是探究他们参数之间的联系,这里我们可以对指标变量进行相似性度量,并对其
-探究三种量表之间的联系,最直接的就是探究他们参数之间的联系,这里我们可以对指标变量进行相似性度量,
+在给出综合评价指标体系的方案前，搞清楚三种量表之间的联系很重要。而探究三种量表之间的联系,最直接的就是探究他们参数之间的联系,这里我们可以对指标变量进行相似性度量。
 
 记数据点$x_j$的为$(x_{1j}, x_{2j}, ... , x_{nj})^T$, 则可以用两变量$x_j$与$x_k$的样本相关系数作为他们的相似性度量.
 
-% 皮尔逊相关系数公式
+% 相关系数公式
 \begin{equation}
 r_{jk} = \frac{\sum_{i=1}^n (x_{ij} - \overline{x}_j)(x_{ik} - \overline{x}_k)}{\sqrt{\sum_{i=1}^n (x_{ij} - \overline{x}_j)^2} \sqrt{\sum_{i=1}^n (x_{ik} - \overline{x}_k)^2}}
 \end{equation}
@@ -353,49 +363,226 @@ r_{jk} = \frac{\sum_{i=1}^n (x_{ij} - \overline{x}_j)(x_{ik} - \overline{x}_k)}{
 \overline{x}_j = \frac{1}{n} \sum_{i=1}^n x_{ij}
 \end{equation}
 
-22个参量分别两两计算得到原矩阵及热力矩阵如下:
+22个参量分别两两计算得到相关系数矩阵及其热力矩阵如图所示:
+
+观察热力系数矩阵可以发现表内的联系明显大于表间的联系，其中职业成熟度量表与SCL90表之间呈现负相关的关系，
+与大五人格度量表之间呈现正相关的关系。通过阅读文献\cite{Chi-Square Test}可以得知，长时间的抑郁症患者的SCL90评分也相对较高，
+会影响我们的生理状况，进一步影响其他心理状态。在职业成熟度量表上的体现为评分下降，在大五人格量表的体现为评分偏离最佳评分，颜色均很浅。
+
 
 \begin{figure}
     \centering
     \begin{minipage}[c]{0.8\textwidth}
         \centering
-        \includegraphics[height=0.4\textheight]{heatmap.png}
+        \includegraphics[height=0.3\textheight]{heatmap.png}
     \end{minipage}
     \caption{热力矩阵}
 \end{figure}
+\paragraph*{最大系数法}解读相关系数矩阵，探究不同变量之间的相似性和关系，还可利用\textbf{最大系数法}将因素进行\textbf{变量聚类}，发现隐藏在数据中的结构，从而帮助理解数据的内在联系并为进一步的分析和建模提供依据。
+在高维数据集中，变量之间可能存在冗余。通过聚类分析，可以将相似的变量归为一类，从而简化数据结构，减少维度，提高分析效率。
+
+在最大系数法中，定义两类变量的距离为
+
+\begin{equation}
+    R(G_1, G_2) = \max_{\quad x_j \in G_1, \, x_k \in G_2} \{ r_{jk} \}, 
+\end{equation}
+
+其中\( R(G_1, G_2) \) 表示两类变量 \( G_1 \) 和 \( G_2 \) 之间的距离。
+\( \max \{ r_{jk} \} \) 表示在所有 \( x_j \in G_1 \) 和 \( x_k \in G_2 \) 中，最大的一对 \( r_{jk} \) 的值。
+
+根据距离，使用聚类算法得到变量的分类图为
 
 \begin{figure}
     \centering
-    \begin{minipage}[c]{0.60\textwidth}
+    \begin{minipage}[c]{0.8\textwidth}
         \centering
-        \includegraphics[height=0.3\textheight]{22.png}
-        \subcaption{22个参量}
+        \includegraphics[height=0.3\textheight]{dendrogram.png}
     \end{minipage}
-    \begin{minipage}[c]{0.60\textwidth}
-        \centering
-        \includegraphics[height=0.3\textheight]{heatmap.png}
-        \subcaption{热力矩阵}
-    \end{minipage}
-    \caption{职业成熟度量表与大五人格量表聚类结果}
+    \caption{聚类树状图}
 \end{figure}
 
+可看出经过变量聚类变量明显分为了九类，
+其中！！！！！！！！！！！！！！！！！！！！！！！！！！
+这个分类结果，为的综合评价体系奠定了基础。
 
 
+\subsubsection{评价体系的建立}
 
 
+心理测试具有间接测量的性质，其评价标准不如物理测量那样绝对和普遍，不能拿一个精确的数学化的评价模型来进行评价，
+所以本文基于模糊综合评价的思想，对不同的指标，依据它们不同的重要程度，就附上不同权重，加和得出来总分。
 
-\subsection{问题二求解}
+\paragraph*{指标赋权方法}权重是评价模型中反映各评价指标相对重要程度的关键参数。指标赋权方法主要分为主观赋权、客观赋权两类。
+主观赋权因过度依赖经验判断而缺乏一定客观性，客观赋权因忽略指标间相关性而难以结合实际, 本文模型结合主观赋权和客观赋权，
+采用\textbf{层次分析-熵值组合赋权法}对各因素对个体的评价能力进行定性-定量分析，使其权重同时反映主观经验和客观数据。
+
+对于本题，我们建立如图的评价体系，综合考虑三种量表的影响。
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=.6\textwidth]{人才评价体系.pdf}
+    \caption{人才评价体系}
+    \label{fig:judgement}
+\end{figure}
+
+人才综合评价体系分为两层，第一评价层和第二评价层。第一评价层包含三个维度，症状评价，职业成熟评价与人格评价结果.
+第二评价层是对三个维度展开，提供了更加细分的指标，对于部分有较高的同质性的指标，考虑综合为一个指标，减少它的维度。
+对于第一评价层，采用层次分析的赋权方法，对于第二评价层采用熵值法赋权。
 
 
-权重是评价模型中反映各评价指标相对重要程度的关键参数。指标赋权方法主要分为主观赋权、客观赋权两类。
-主观赋权因过度依赖经验判断而缺乏一定客观性，客观赋权因忽略指标间相关性而难以结合实际,本文模型结合主观赋权和客观赋权，
-采用层次分析-熵值组合赋权法对各因素对个体的评价能力进行定性-定量分析，使其权重同时反映主观经验和客观数据。
-\subsubsection{权重法}
+\subsubsection{数据预处理}
+在利用三种量表中的数据之前，我们需要对三种量表中的数据进行预处理。举例说明：
+对于\textbf{症状自评量表SCL-90}中，强迫症状、人际关系敏感、抑郁、焦虑、敌对、恐怖、偏执、精神病性8大指标都是极大型指标，指标数值越大越好。而躯体化是极小型指标，指标数值越小越好。
+对于\textbf{职业成熟度量表}，信息应用、职业认知、自我认知、个人调适、职业态度、价值观念、职业选择、条件评估这8大指标都是极大型指标。
+对于\textbf{大五人格量表}，N（神经质），E（外向性），O（开放性），A（宜人性），C（严谨性）这五大指标是中间型指标，标数值越接近某个值越好。
+
+可以看出各种数据纷繁复杂大小不一，最优值也并非有明确的指标、明确的方向，那么如何综合的考虑这些指标，如何利用好这些数据呢？
+
+\paragraph*{正向化}有的数据是越大越好，有的数据是越小越好，有的数据是靠近某个值越好，这种不同的方向和区间让分析变得混乱，为了简化分析我们将数据进行正向化处理，都让他越大越好。
+
+对于极大型指标、极小型指标、中间型指标这三种指标分别采用不同的正向化处理方法
+
+极小型指标转化为极大型指标：
+\begin{equation}
+    \overline{x}_i = \frac{1}{x_{i}}  
+\end{equation}
+
+中间型指标转化为极大型指标：
+
+\begin{equation}
+    \overline{x}_i = 1- \frac{\left\lvert x_i - x_{best}\right\rvert }{\max({\left\lvert x_i - x_{best}\right\rvert} ) }
+\end{equation}
+
+
+经过这样的正向化处理后，成功将数据都变为越大越好的数值类型，方便之后的运算。
+
+
+\paragraph*{标准化}经过了正向化后，还存在一个问题就是所有的值都有他的量纲，
+对于每一列的数据进行标准化的方法如下：
+
+\begin{equation}
+    z_i = 1- \frac{x_i}{ \sqrt{\sum_{i=1}^n x_{i}^2} } 
+\end{equation}
 
 \subsubsection{熵权法}
 
-\subsubsection{权重法}
+经过了正向化和标准化的修正之后，剩下的步骤就是进行评分指标的构建.
+熵权法构建系数利用了一定的信息论的知识，通过这种方法，可以量化各指标的重要性，使得综合评分更加客观和科学。
 
+\paragraph*{信息熵}是信息论的基本概念, 描述信息源各可能事件发生的不确定性。是一种基于信息熵的多指标评价方法。
+熵权法利用信息论中的熵来确定各指标的权重。数据的变异程度越大，说明该指标包含的信息量越多，因此该指标的重要性也就越大。
+
+信息熵的计算公式：
+\begin{equation}
+    H_j = -\frac{1}{\ln(n)} \sum_{i=1}^{n} p_{ij} \ln(p_{ij})
+\end{equation}
+    
+各指标权重$w_j$的公式：
+\begin{equation}
+    w_j = \frac{1 - H_j}{\sum_{j=1}^{m} (1 - H_j)}
+\end{equation}
+
+
+  
+生成权重系数为：
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccccccc}
+        \toprule
+        & 信息应用 & 职业认知 & 自我认知 & 个人调适 & 职业态度 & 价值观念 \\ \midrule
+        W & 0.0121 & 0.0123 & 0.0139 & 0.0115 & 0.0466 & 0.0101 \\ \midrule
+        & 职业选择 & 条件评估 & 躯体化 & 强迫症状 & 人际关系敏感 & 抑郁 \\ \midrule
+        W & 0.0212 & 0.0064 & 0.0437 & 0.046 & 0.0465 & 0.0221 \\ \midrule
+        & 焦虑 & 敌对 & 恐怖 & 偏执 & 精神病性 & N \\ \midrule
+        W & 0.0410 & 0.0402 & 0.0271 & 0.0374 & 0.0365 & 0.1267 \\ \midrule
+        & E  & O & C & A \\ \midrule
+        W & 0.1024 & 0.1037 & 0.0447 & 0.1480 \\ \bottomrule
+    \end{tabular}
+    \caption{权重矩阵}
+    \label{tab:weights}
+\end{table}
+
+\subsubsection{层次分析法}
+
+第一层中使用层次分析法赋权, 是主观的分析方法。分析一层指标（scl，职业成熟度量表，大五人格度量表）对人才综合评价体系的影响权重，需要对人才综合评价体系中3个一层指标标判断矩阵，通过观察相关系数矩阵并查阅相关资料\cite{AHP1}\cite{AHP2}\cite{AHP3}可得：
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+        \toprule
+        & T1 & T2 & T3 \\ \midrule
+        T1 & 1 & \(\frac{4}{5}\) & \(\frac{9}{10}\) \\
+        T2 & \(\frac{5}{4}\) & 1 & \(\frac{4}{5}\) \\
+        T3 & \(\frac{10}{9}\) & \(\frac{5}{4}\) & 1 \\ \bottomrule
+    \end{tabular}
+    \caption{指标判断矩阵}
+    \label{tab:index judgment matrix}
+    \end{table}
+        
+计算得最优权重向量：
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+        \toprule
+        %& & & \\ \midrule
+        w & 0.1556 & 0.6832 & 0.1612 \\ \bottomrule
+    \end{tabular}
+    \caption{权重数据}
+    \label{tab:weights}
+\end{table}
+
+\paragraph*{总分计算公式} 通过对数据的预处理，一二级权重的计算，我们可以得到总分的计算公式。
+
+
+给出综合评分的公式：
+\begin{equation}
+    \mu = \sum_{j=1} w_i (\sum_{i=1} w_{ij}\mu_i)
+\end{equation}
+
+
+\subsubsection{聚类分析}
+
+以第一分析层的三个大指标进行聚类分析，得到的聚类结果在三维空间分布如下：
+
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=.6\textwidth]{cluster.jpg}
+    \caption{聚类分析三维图}
+    \label{fig:cluster}
+\end{figure}
+
+
+\subsubsection{稳定性检验}
+
+
+第四问：
+1：我们将所有指标都进行了正向化处理，可以消除SCL90极小化指标对总分所造成的影响
+
+2：标准化：通过标准化处理消除了三张表不同量纲的影响,数据标准化可以减少数值计算过程中的数值不稳定性，提高模型的表现和鲁棒性。
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+        \toprule
+        & 变化幅度 & 样本中心 & 得分变化幅度 \\ \midrule
+        SCL90 & 5\% & 90.5 & 3.4\% \\ 
+              & 10\% & & 13.2\% \\ 
+        \bottomrule
+    \end{tabular}
+    \caption{数据表}
+    \label{tab:data}
+\end{table}
+查阅SCL90指标得分超越2时被认作心理存在轻微病态，故当变化幅度较大时得分变化幅度误差大。当变化幅度变大的时候我们有更大的的理由认为该人的心理病态几率变大，得分变化幅度也应当变大。该模型可以更好的反应SCL90对人才评分的影响。
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=.6\textwidth]{scorecompare.png}
+    \caption{总分比较}
+    \label{fig:scorecompare}
+\end{figure}
+通过直接对比原总分发现我们的总分将人之间分差扩大，更容易分析出心理健康状况做出评价。（可写可不写）
 \subsection{问题三求解}
 
 \subsection{问题四求解}
@@ -410,6 +597,12 @@ r_{jk} = \frac{\sum_{i=1}^n (x_{ij} - \overline{x}_j)(x_{ik} - \overline{x}_k)}{
     \bibitem[2]{The Career Development Quarterly} Savickas, M. L. (1999). The Career Development Quarterly.
     \bibitem[3]{The Big Five trait taxonomy} John, O. P., Srivastava, S. (1999). The Big Five trait taxonomy: History, measurement, and theoretical perspectives.
     \bibitem[4]{k-means}MacQueen, J. (1967). Some methods for classification and analysis of multivariate observations. In Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability, Volume 1: Statistics (pp. 281-297). University of California Press.
+    \bibitem[5]{Chi-Square Test}Pearson, K. (1900). "On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling."
+    \bibitem[6]{heatmap} 蔡秀算.认知行为护理策略对老年抑郁症伴高血压患者SCL 90评分及血压水平的影响[J].心血管病防治知识,2023,13(28):55-57.
+    \bibitem[7]{AHP1} 邱林,郑雪,王雁飞.积极情感消极情感量表(PANAS)的修订[J].应用心理学,2008,14(03):249-254+268.
+    \bibitem[8]{AHP2} 王若逸,苏永强,陈朝阳,等,无法忍受不确定性与抑郁倾向关系:情绪调节困难的中介作用[J].宁波大学学报(教育科学版),2017,39(03):10-14.
+    \bibitem[9]{AHP3} 汪玥,张豹,周晖.中小学生正念注意觉知与心理健康：情绪调节和积极重评的跨时间中介作用[J].心理发展与教育,2022,38(05):692-702.DOI:10.16187/j.cnki.issn1001-4918.2022.05.10.
+
     \bibitem[]{mathematical-modeling}    全国大学生数学建模竞赛论文格式规范 (2023 年 修改).
     \bibitem[]{3} \url{https://www.wikipedia.org}
 \end{thebibliography}
@@ -458,7 +651,7 @@ r_{jk} = \frac{\sum_{i=1}^n (x_{ij} - \overline{x}_j)(x_{ik} - \overline{x}_k)}{
         & p4.cpp &  \\
         \midrule
         \multirow{2}{*}{数据} 
-        & sensitivity.xlsx & 该表格是我们的原始数据表格，该表格用于导入 Matlab 进行计算 \\
+        & sensitivity.xlsx & 该表格是的原始数据表格，该表格用于导入 Matlab 进行计算 \\
         \cline{2-3}
         & cov.xlsx & 该表格是三个量表参量之间的相关系数矩阵 \\
         \bottomrule
